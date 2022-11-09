@@ -1,6 +1,6 @@
 package com.company;
 
-public class TaskThread  extends Thread{
+public class TaskThread extends Thread implements Comparable<TaskThread>{
     //made by Daniel Duthu
     int Btime;
     int id;
@@ -16,4 +16,9 @@ public class TaskThread  extends Thread{
     public void DecrementBtime(){if(Btime>0){Btime-=1;}}
     //get method for id
     public int getTid(){return id;}
+
+    @Override
+    public int compareTo(TaskThread other) { return this.Btime - other.getBtime(); }
+    //[-1 if other > this, 0 if other = this, 1 if other < this]
+    //can be sorted by Collections.sort(ArrayList<TaskThreads>);
 }
