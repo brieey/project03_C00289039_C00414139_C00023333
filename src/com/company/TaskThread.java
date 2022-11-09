@@ -21,4 +21,10 @@ public class TaskThread extends Thread implements Comparable<TaskThread>{
     public int compareTo(TaskThread other) { return this.Btime - other.getBtime(); }
     //[-1 if other > this, 0 if other = this, 1 if other < this]
     //can be sorted by Collections.sort(ArrayList<TaskThreads>);
+
+    public void run(){
+        while(Btime>0) {
+            //this just keeps the task open until it'd done its Btime
+        }
+    }
 }
