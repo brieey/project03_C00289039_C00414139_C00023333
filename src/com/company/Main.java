@@ -272,7 +272,7 @@ public class Main {
 
             //launching Dispatchers
             for (int i = 0; i < cores; i++) {
-                DispatcherThread thread = new DispatcherThread(method,ReadyQueue,ReadySem,TaskList,TaskSem, i);
+                DispatcherThread thread = new DispatcherThread(method,ReadyQueue,ReadySem,TaskList,TaskSem, i, quanta);
                 thread.setName("Dispatcher: " + String.valueOf(i) + "(D" + (i + 1) + ")");
                 DispatcherList.add(i, thread);
                 thread.start();
