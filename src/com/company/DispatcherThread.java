@@ -91,7 +91,6 @@ public class DispatcherThread extends Thread{
                             else{
                                 try{ReadyQueueSem.acquire();}
                                 catch (InterruptedException e){throw new RuntimeException(e);}
-                                ReadyQueue.pop();//should pop off first element, as that task is done
                                 ReadyQueueSem.release();
                             }
                         }else{
