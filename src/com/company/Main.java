@@ -264,18 +264,18 @@ public class Main {
             //launching Tasks
             for (int i = 0; i < T; i++) {
                 TaskThread thread = new TaskThread(RandBtime[rand.nextInt(4)], i);
-                thread.setName("Task: " + String.valueOf(i) + "(D" + (i + 1) + ")");
-                TaskList.add(i, thread);
+                thread.setName("Task: " + String.valueOf(i) + "(D" + (i + 1) + ")");//I forgot what the (D(i+1)) part is about
+                TaskList.add(thread);
                 thread.start();
                 TaskSem.add(new Semaphore(1));
             }
 
             //[test line] print all task Btimes
-            for (int i = 0; i < T; i++) {System.out.println("Task:"+TaskList.get(i).getId()+" Btime:"+TaskList.get(i).getBtime());}
+            for (int i = 0; i < T; i++) {System.out.println(TaskList.get(i).getName()+" Btime:"+TaskList.get(i).getBtime());}
             //start time for all tasks
             long startTimeNano=System.nanoTime();
 
-            //printed line for seperating initial and final read-outs of each task
+            //printed line for separating initial and final read-outs of each task
             System.out.println("---===<(running)>===---");
 
             //launching Dispatchers

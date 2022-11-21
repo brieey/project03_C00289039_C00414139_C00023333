@@ -50,6 +50,8 @@ public class DispatcherThread extends Thread{
                         ReadyQueue.addAll(TaskList);
                         ReadyQueueSem.release();
                     }else{
+                        try{wait(1);}//to ensure that the first dispatcher can get the semaphore first
+                        catch (InterruptedException e){throw new RuntimeException(e);}
                         try{ReadyQueueSem.wait();}
                         catch (InterruptedException e){throw new RuntimeException(e);}
                     }
