@@ -61,9 +61,7 @@ public class DispatcherThread extends Thread{
                                 System.out.println("Proc. Thread " + ReadyQueue.get(i).id + "  | On burst " + j);
                                 ReadyQueue.get(i).DecrementBtime();
                             }
-
                         }
-
                     }else{
                         break;
                     }
