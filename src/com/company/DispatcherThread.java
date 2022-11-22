@@ -23,8 +23,6 @@ public class DispatcherThread extends Thread{
         this.quanta=Q;
     }
     public void run(){
-        //synchronized (this) {//without this it would throw a java.lang.IllegalMonitorStateException
-            while (TaskList.size() != 0) {
                 switch (method) {
                     case 1://FCFS logic here
                         break;
@@ -45,16 +43,33 @@ public class DispatcherThread extends Thread{
 
                         TaskThread temp;
                         //populate the ready queue. this is done 'as they arrive' with me assuming they arrive at effectively the same time and just add the Task threads into the ReadyQueue 1:1.
-                        if (id == 0) {
-                            try {ReadyQueueSem.acquire();}
-                            catch (InterruptedException e) {throw new RuntimeException(e);}
-                            ReadyQueue.addAll(TaskList);
-                            ReadyQueueSem.release();
+                        boolean firstRun = true;
+                        if (id == 0 && firstRun) {
+                            try {
+                                ReadyQueueSem.acquire();
+                                ReadyQueue.addAll(TaskList);
+                                ReadyQueueSem.release();
+                                firstRun = false;
+                                System.out.println(ReadyQueue);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            //ReadyQueue.addAll(TaskList);
+                            //ReadyQueueSem.release();
                         } else {
-                            try {wait(1);}//to ensure that the first dispatcher can get the semaphore first
-                            catch (InterruptedException e) {throw new RuntimeException(e);}
-                            try {ReadyQueueSem.acquire();}
-                            catch (InterruptedException e) {throw new RuntimeException(e);}
+                            try {
+                                wait(80);
+                            }//to ensure that the first dispatcher can get the semaphore first
+                            catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            try {
+                                ReadyQueueSem.acquire();
+                                ReadyQueueSem.release();
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            //ReadyQueueSem.release();
                         }
 
                         //keep this running until the ReadyQueue is empty, this being the Round Robin scheduling procedure.
@@ -67,18 +82,20 @@ public class DispatcherThread extends Thread{
                             //this means that for 3 tasks remaining you can effectively not have the 4th core running as the
                             //last 3 tasks can get full attention on the first 3 cores.
                             if (ReadyQueue.get(id) != null) {
-                                try {ReadyQueueSem.acquire();}
-                                catch (InterruptedException e) {throw new RuntimeException(e);}
-                                temp = ReadyQueue.get(id);
-                                ReadyQueue.remove(id);
-                                ReadyQueueSem.release();
+                                try {
+                                    ReadyQueueSem.acquire();
+                                    temp = ReadyQueue.get(id);
+                                    ReadyQueue.remove(id);
+                                    ReadyQueueSem.release();
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                //temp = ReadyQueue.get(id);
+                                //ReadyQueue.remove(id);
+                                //ReadyQueueSem.release();
 
                                 for (int i = 0; i < quanta; i++) {
-                                    //try{ReadyQueueSem.acquire();}
-                                    //catch (InterruptedException e){throw new RuntimeException(e);}
                                     temp.DecrementBtime();
-                                    //ReadyQueueSem.release();
-                                    //shouldn't need the sem here as each dispatcher will only ever have a specific task
 
                                     //this catches the case where the task is done before the quanta is reached to end the quanta loop early
                                     if (temp.getBtime() < 1) {
@@ -87,16 +104,25 @@ public class DispatcherThread extends Thread{
                                 }
                                 //place task at end of ReadyQueue as it still has some Btime left ot process
                                 if (temp.getBtime() > 0) {
-                                    try {ReadyQueueSem.acquire();}
-                                    catch (InterruptedException e) {throw new RuntimeException(e);}
-                                    ReadyQueue.add(temp);//should pop off first element and append it to the end.
-                                    ReadyQueueSem.release();
+                                    try {
+                                        ReadyQueueSem.acquire();
+                                        ReadyQueue.add(temp);//should pop off first element and append it to the end.
+                                        ReadyQueueSem.release();
+                                    } catch (InterruptedException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    //ReadyQueue.add(temp);//should pop off first element and append it to the end.
+                                    //ReadyQueueSem.release();
                                 }
                                 //remove the task from the ReadyQueue all together as it is done its task completely now
                                 else {
-                                    try {ReadyQueueSem.acquire();}
-                                    catch (InterruptedException e) {throw new RuntimeException(e);}
-                                    ReadyQueueSem.release();
+                                    try {
+                                        ReadyQueueSem.acquire();
+                                        ReadyQueueSem.release();
+                                    } catch (InterruptedException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    //ReadyQueueSem.release();
                                 }
                             } else {
                                 //this goes back to the statements I made of tasks remaining < # of cores leading to
@@ -112,7 +138,5 @@ public class DispatcherThread extends Thread{
                     default:
                         break;
                 }
-            }
-        //}
     }
 }

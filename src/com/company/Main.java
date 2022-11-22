@@ -299,7 +299,7 @@ public class Main {
             long TimeSpentNano=System.nanoTime()-startTimeNano;
             //[test line] print all task Btimes and total execution time
             for (int i = 0; i < T; i++) {System.out.println("Task:"+TaskList.get(i).getId()+" Btime:"+TaskList.get(i).getBtime());}
-            System.out.println("Total execution time: "+(float)(TimeSpentNano/100000));
+            System.out.println("Total execution time: "+(float)(TimeSpentNano/100000)+" ms");
 
             //join Dispatchers
             for (int i = 0; i < cores; i++) {
