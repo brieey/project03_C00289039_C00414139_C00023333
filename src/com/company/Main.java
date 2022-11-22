@@ -7,6 +7,7 @@ import java.util.Random;
 public class Main {
 
     public static void main(String[] args) {
+        //Code Changes Start By Brianna Jordan
 
 
         int cores = 0;
@@ -244,6 +245,7 @@ public class Main {
             } else {
                 System.out.println("Invalid first argument");
             }
+            //Code Changes End Brianna Jordan
 
             //launch threads and join them here
 
@@ -258,7 +260,8 @@ public class Main {
             Semaphore ReadySem=new Semaphore(1);
             ArrayList<Semaphore> TaskSem=new ArrayList<Semaphore>();
             Random rand = new Random();
-            int T=rand.nextInt(24)+1;//replace with 5 for the task 1 report
+            //int T=rand.nextInt(24)+1;//replace with 5 for the task 1 report
+            int T = 4;
             int[] RandBtime={18, 7, 25, 42, 21};
 
             //launching Tasks
