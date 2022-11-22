@@ -259,6 +259,7 @@ public class Main {
             ArrayList<Semaphore> TaskSem=new ArrayList<Semaphore>();
             Random rand = new Random();
             int T=rand.nextInt(24)+1;//replace with 5 for the task 1 report
+            //int T=5;
             int[] RandBtime={18, 7, 25, 42, 21};
 
             //launching Tasks
@@ -287,13 +288,13 @@ public class Main {
             }
 
             //join Tasks [given how the logic has developed DO NOT move this into the dispatcher thread]
-            for (int i = 0; i < T; i++) {
-                try{//join needs an exception catch in java, interesting.
-                    TaskList.get(i).join();
-                }catch(InterruptedException e){
-                    System.out.println("Exception -> " + e);
-                }
-            }
+            //for (int i = 0; i < T; i++) {
+            //    try{//join needs an exception catch in java, interesting.
+            //        TaskList.get(i).join();
+            //    }catch(InterruptedException e){
+            //        System.out.println("Exception -> " + e);
+            //    }
+            //}
 
             //end time for all tasks
             long TimeSpentNano=System.nanoTime()-startTimeNano;
