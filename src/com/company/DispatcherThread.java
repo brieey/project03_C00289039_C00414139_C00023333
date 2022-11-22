@@ -24,7 +24,49 @@ public class DispatcherThread extends Thread{
     }
     public void run() {
         switch (method) {
-            case 1://FCFS logic here
+            case 1://FCFS logic here by Brianna Jordan
+                //Add tasks to the ready queue
+                if(id == 0){
+
+                    try{
+                        ReadyQueueSem.acquire();
+                    } catch(InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    ReadyQueue.addAll(TaskList);
+                    ReadyQueueSem.release();
+
+                }else{
+                    try{
+                        wait(1);
+                    }catch(InterruptedException e){
+                        throw new RuntimeException(e);
+                    }
+                    try{
+                        ReadyQueueSem.acquire();
+                    }catch(InterruptedException e){
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                //Executes until there are no more tasks in the queue
+                while(ReadyQueue.size() > 0){
+                    if(ReadyQueue.get(id) != null){
+                        //Iterates through the queue and executes fully
+                        for(int i = 0; i < ReadyQueue.size(); i++){
+                            //Go to each task and decrement the burst time fully
+                            int burstTime = ReadyQueue.get(i).Btime;
+                            System.out.println("Thread " + ReadyQueue.get(i).id + "        | Burst Time = " + burstTime + ", Current Burst = 0");
+                            for(int j = 0; j < burstTime; j++){
+                                System.out.println("Proc. Thread " + ReadyQueue.get(i).id + "  | On burst " + j);
+                                ReadyQueue.get(i).DecrementBtime();
+                            }
+                        }
+                    }else{
+                        break;
+                    }
+
+                }
                 break;
             case 2://RR logic here By Daniel Duthu
                 /*need to populate the ready queue with the tasks form the task thread array
