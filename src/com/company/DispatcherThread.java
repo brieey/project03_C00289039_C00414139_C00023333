@@ -55,8 +55,8 @@ public class DispatcherThread extends Thread{
                     //ReadyQueue.addAll(TaskList);
                     //ReadyQueueSem.release();
                 } else {
-                    try {wait(80);}//to ensure that the first dispatcher can get the semaphore first
-                    catch (InterruptedException e) {throw new RuntimeException(e);}
+                    //try {wait(80);}//to ensure that the first dispatcher can get the semaphore first
+                    //catch (InterruptedException e) {throw new RuntimeException(e);}
                     //finally {System.out.println(this.getName()+"2");}//test line
                     try {
                         ReadyQueueSem.acquire();
@@ -104,7 +104,7 @@ public class DispatcherThread extends Thread{
                             //ReadyQueue.add(temp);
                             //ReadyQueueSem.release();
                         }
-                        System.out.println(ReadyQueue);
+                        if(!ReadyQueue.isEmpty()){System.out.println(ReadyQueue);}//test line
                     } else {
                         System.out.println(this.getName() + "less than 4 tasks");
                         break;
