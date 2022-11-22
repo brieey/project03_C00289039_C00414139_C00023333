@@ -49,7 +49,7 @@ public class DispatcherThread extends Thread{
                             int burstTime = ReadyQueue.get(i).Btime;
                             System.out.println("Thread " + ReadyQueue.get(i).id + "        | Burst Time = " + burstTime + ", Current Burst = 0");
                             for(int j = 0; j < burstTime; j++){
-                                System.out.println("Proc. Thread " + ReadyQueue.get(i).id + "  | On burst " + j);
+                                System.out.println("Thread " + ReadyQueue.get(i).id + "  | On burst " + j);
                                 ReadyQueue.get(i).DecrementBtime();
                             }
                         }
