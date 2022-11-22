@@ -24,7 +24,6 @@ public class DispatcherThread extends Thread{
     }
     
     public void run(){
-        while(TaskList.size()!=0){
             switch(method) {
                 case 1://FCFS logic here
                     break;
