@@ -1,6 +1,7 @@
 package com.company;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 public class DispatcherThread extends Thread{
@@ -156,9 +157,123 @@ public class DispatcherThread extends Thread{
                 }
                 System.out.println(this.getName() + " is done");System.out.println(ReadyQueue);//test line
                 break;
-            case 3://N-SJF logic here
+            case 3://Non-preemptive Shortest Job First by Alexandre' Davis
+                Scanner scan1 = new Scanner(System.in);
+                System.out.println ("enter no of process:");
+                int n = scan1.nextInt();
+                int processID[] = new int[n];
+                int arrivalTime[] = new int[n];
+                int burstTime[] = new int[n];
+                int ct[] = new int[n];
+                int ta[] = new int[n];
+                int waitTime[] = new int[n];
+                int f[] = new int[n];
+                int st = 0;
+                int total = 0;
+                float avgWeight = 0;
+                float avgturnTime = 0;
+                for (int i = 0; i < n; i++) {
+                    System.out.println("Enter process" + (i + 1) + " arrival time:");
+                    arrivalTime[i] = scan1.nextInt();
+                    System.out.println("Enter process" + (i + 1) + " burst time:");
+                    burstTime[i] = scan1.nextInt();
+                    processID[i] = i + 1;
+                    f[i] = 0;
+                }
+                boolean a = true;
+                while (true) {
+                    int c = n;
+                    int min = 999;
+                    if (total == n)
+                        break;
+                    for (int i = 0; i < n; i++) {
+                        if ((arrivalTime[i] <= st) && (f[i] == 0) && (burstTime[i] < min)) {
+                            min = burstTime[i];
+                            c = i;
+                        }
+                    }
+                    if (c == n) {
+                        st++;
+                    } else {
+                        ct[c] = st + burstTime[c];
+                        st += burstTime[c];
+                        ta[c] = ct[c] - arrivalTime[c];
+                        waitTime[c] = ta[c] - burstTime[c];
+                        f[c] = 1;
+                        total++;
+                    }
+                }
+                System.out.println("\nprocessID  arrival burst  complete turn waiting");
+                for (int i = 0; i < n; i++) {
+                    avgWeight += waitTime[i];
+                    avgturnTime += ta[i];
+                    System.out.println(processID[i]+"\t"+arrivalTime[i]+"\t"+burstTime[i]+"\t"+ct[i]+"\t"+ta[i]+"\t"+waitTime[i]);
+                    System.out.println ("\naverage tat is "+ (float)(avgturnTime/n));
+                    System.out.println ("average wt is "+ (float)(avgWeight/n));
+                    scan1.close();
+                }
                 break;
-            case 4://P-SJF logic here
+            case 4://P-SJF logic here by Alexandre' Davis
+                Scanner scan2  = new Scanner(System.in);
+                System.out.println ("enter no of process:");
+                int x = scan2.nextInt();
+                int preemptiveID[] = new int[x];
+                int arrival[] = new int[x];
+                int burst[] = new int[x];
+                int complete[] = new int[x];
+                int turnaround[] = new int[x];
+                int wait[] = new int[x];
+                int v[] = new int[x];
+                int k[]= new int[x];
+                int i, value=0, tot=0;
+                float avgwait = 0, avgturnaround = 0;
+                for (int z = 0; z < x; z++) {
+                    preemptiveID[z] = z + 1;
+                    System.out.println("Enter process" + (z + 1) + " arrival time:");
+                    arrival[z] = scan2.nextInt();
+                    System.out.println("Enter process" + (z + 1) + " burst time:");
+                    burst[z] = scan2.nextInt();
+                    k[z] = burst[z];
+                    v[z] = 0;
+                }
+                while (true) {
+                    int min = 99;
+                    int c = x;
+                    if (tot == x)
+                        break;
+                    for (int z = 0; z < x; z++) {
+                        if ((arrival[z] <= value) && (v[z] == 0) && (burst[z] < min)) {
+                            min = burst[z];
+                            c = z;
+                        }
+                    }
+                    
+                    if (c == x)
+                        value++;
+                    else {
+                        burst[c]--;
+                        value++;
+                        if (burst[c]==0)
+                        {
+                            complete[c] = value;
+                            v[c] = 1;
+                            tot++;
+                        }
+                        for (int j = 0; j < x; j++) {
+                            turnaround[j] = complete[j] - arrival[j];
+                            wait[j] = turnaround[j] - k[j];
+                            avgwait += wait[j];
+                            avgturnaround += turnaround[j];
+                        }
+                        System.out.println("processID  arrival  burst  complete turn waiting");
+                        for (int j = 0; j < x; j++) {
+                            System.out.println(preemptiveID[j] +"\t"+ arrival[j]+"\t"+ k[j] +"\t"+ complete[j] +"\t"+ turnaround[j] +"\t"+ wait[j]);
+                            System.out.println("\naverage tat is "+ (float)(avgturnaround/x));
+                            System.out.println("average wt is "+ (float)(avgwait/x));
+                            scan2.close();
+                        }
+                    }
+                }
                 break;
             default:
                 break;
