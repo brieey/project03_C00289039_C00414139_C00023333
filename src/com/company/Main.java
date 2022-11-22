@@ -264,21 +264,29 @@ public class Main {
             //launching Tasks
             for (int i = 0; i < T; i++) {
                 TaskThread thread = new TaskThread(RandBtime[rand.nextInt(4)], i);
-                thread.setName("Task: " + String.valueOf(i) + "(D" + (i + 1) + ")");
-                TaskList.add(i, thread);
+                thread.setName("Task: " + String.valueOf(i) + "(D" + (i + 1) + ")");//I forgot what the (D(i+1)) part is about
+                TaskList.add(thread);
                 thread.start();
                 TaskSem.add(new Semaphore(1));
             }
 
+            //[test line] print all task Btimes
+            for (int i = 0; i < T; i++) {System.out.println(TaskList.get(i).getName()+" Btime:"+TaskList.get(i).getBtime());}
+            //start time for all tasks
+            long startTimeNano=System.nanoTime();
+
+            //printed line for separating initial and final read-outs of each task
+            System.out.println("---===<(running)>===---");
+
             //launching Dispatchers
             for (int i = 0; i < cores; i++) {
-                DispatcherThread thread = new DispatcherThread(method,ReadyQueue,ReadySem,TaskList,TaskSem, i);
+                DispatcherThread thread = new DispatcherThread(method,ReadyQueue,ReadySem,TaskList,TaskSem, i, quanta);
                 thread.setName("Dispatcher: " + String.valueOf(i) + "(D" + (i + 1) + ")");
                 DispatcherList.add(i, thread);
                 thread.start();
             }
 
-            //join Tasks [might work better to move into the dispatcher thread dependant on how the logic develops
+            //join Tasks [given how the logic has developed DO NOT move this into the dispatcher thread]
             for (int i = 0; i < T; i++) {
                 try{//join needs an exception catch in java, interesting.
                     TaskList.get(i).join();
@@ -286,6 +294,12 @@ public class Main {
                     System.out.println("Exception -> " + e);
                 }
             }
+
+            //end time for all tasks
+            long TimeSpentNano=System.nanoTime()-startTimeNano;
+            //[test line] print all task Btimes and total execution time
+            for (int i = 0; i < T; i++) {System.out.println("Task:"+TaskList.get(i).getId()+" Btime:"+TaskList.get(i).getBtime());}
+            System.out.println("Total execution time: "+(float)(TimeSpentNano/100000)+" ms");
 
             //join Dispatchers
             for (int i = 0; i < cores; i++) {
