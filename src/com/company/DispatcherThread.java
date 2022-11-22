@@ -104,6 +104,7 @@ public class DispatcherThread extends Thread{
                             //ReadyQueue.add(temp);
                             //ReadyQueueSem.release();
                         }
+                        System.out.println(ReadyQueue);
                     } else {
                         System.out.println(this.getName() + "less than 4 tasks");
                         break;
@@ -111,7 +112,7 @@ public class DispatcherThread extends Thread{
                         //dedication so the dispatchers can shut down early instead of running into nulls
                     }
                 }
-                System.out.println(this.getName() + " is done");
+                System.out.println(this.getName() + " is done");System.out.println(ReadyQueue);//test line
                 break;
             case 3://N-SJF logic here
                 break;
